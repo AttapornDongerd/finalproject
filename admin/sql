@@ -1,1 +1,254 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.1
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1
+-- Generation Time: Jan 30, 2024 at 04:53 PM
+-- Server version: 10.4.28-MariaDB
+-- PHP Version: 8.2.4
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Database: `project66`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `customer`
+--
+
+CREATE TABLE `customer` (
+  `cus_id` varchar(10) NOT NULL COMMENT 'รหัสลูกค้า',
+  `cus_name` varchar(50) NOT NULL COMMENT 'ชื่อ-นามสกุล',
+  `cus_tel` char(10) NOT NULL COMMENT 'เบอร์โทร'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `customer`
+--
+
+INSERT INTO `customer` (`cus_id`, `cus_name`, `cus_tel`) VALUES
+('C001', 'โบ โบนิตา', '0854567895'),
+('C002', 'ชนา ชาลิสา', '0659853215'),
+('C003', 'โบ โบรดา', '0655654313');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `design`
+--
+
+CREATE TABLE `design` (
+  `design_id` varchar(10) NOT NULL COMMENT 'รหัสแบบชุด',
+  `design_image` varchar(250) NOT NULL COMMENT 'ภาพชุด',
+  `detail` varchar(50) NOT NULL COMMENT 'รายละเอียดผ้า',
+  `starting_price` int(10) NOT NULL COMMENT 'ราคาเริ่มต้น',
+  `period` varchar(10) NOT NULL COMMENT 'ระยะเวลาตัดชุด'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `design`
+--
+
+INSERT INTO `design` (`design_id`, `design_image`, `detail`, `starting_price`, `period`) VALUES
+('D001', 'ผ้าถุงสำเร็จ.jpg', 'ผ้าทอ ผ้าถุง', 490, '3 วัน'),
+('D002', 'ชุดเดรสสีฟ้าทะเล.jpg', 'ชุดเดรชผ้าไหม', 750, '5 วัน');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `employees`
+--
+
+CREATE TABLE `employees` (
+  `emp_id` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'รหัสพนักงาน',
+  `emp_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'ชื่อ-นามสกุล',
+  `emp_user` varchar(50) NOT NULL,
+  `emp_pass` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'รหัสผ่าน',
+  `emp_tel` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'เบอร์โทร',
+  `updated_at` datetime NOT NULL COMMENT 'วันที่แก้ไข',
+  `status` enum('เจ้าของร้าน','พนักงาน') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'สิทธิ์การใช้งาน',
+  `created_at` datetime NOT NULL COMMENT 'วันที่สร้าง'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `employees`
+--
+
+INSERT INTO `employees` (`emp_id`, `emp_name`, `emp_user`, `emp_pass`, `emp_tel`, `updated_at`, `status`, `created_at`) VALUES
+('E001', 'กรรณิกา ศรีบุรินทร์', 'aaa1', '$2y$10$iWFxtgoS8rDqbf5HGBYY0OrawPnm3fKcVWkoq.eT643oaeT4TzYqa', '0987637801', '2024-01-28 16:33:45', 'เจ้าของร้าน', '0000-00-00 00:00:00'),
+('E002', 'อรรถพร ดอนเกิด', 'aaa2', '$2y$10$ZRuMiurWCh5Q3x6UwtuDEOn8AkFz/tKR7oNJal2EpnxGDXJl2VKMe', '0800089158', '2024-01-29 16:57:20', 'พนักงาน', '0000-00-00 00:00:00'),
+('E003', 'ธนิดาพร ไชยสงเดช', 'aaa3', '$2y$10$IPUr4/uM8Ic4GHrKBJTPJuea1CpjqEjJ4RS.KCrmU5FauaeiZODCO', '0658954756', '2024-01-28 16:42:51', 'พนักงาน', '0000-00-00 00:00:00');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `order_sewing`
+--
+
+CREATE TABLE `order_sewing` (
+  `ord_id` varchar(10) NOT NULL COMMENT 'รหัสสั่งตัดชุด',
+  `detail_measure` text NOT NULL COMMENT 'รายละเอียดวัดตัว',
+  `ord_size` varchar(50) NOT NULL COMMENT 'ขนาดผ้า',
+  `order_price` int(10) NOT NULL COMMENT 'ค่าตัดชุด',
+  `detailmore` varchar(50) NOT NULL COMMENT 'รายละเอียดเพิ่มเติม',
+  `price_detailmore` int(11) NOT NULL COMMENT 'ราคาเพิ่มเติม',
+  `ord_date` date NOT NULL COMMENT 'วันที่สั่งผลิต',
+  `ord_status` varchar(50) NOT NULL COMMENT 'สถานะ',
+  `emp_id` varchar(10) NOT NULL COMMENT 'รหัสพนักงาน',
+  `design_id` varchar(10) NOT NULL COMMENT 'รหัสแบบชุด',
+  `cus_id` varchar(10) NOT NULL COMMENT 'รหัสลูกค้า'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `order_sewing`
+--
+
+INSERT INTO `order_sewing` (`ord_id`, `detail_measure`, `ord_size`, `order_price`, `detailmore`, `price_detailmore`, `ord_date`, `ord_status`, `emp_id`, `design_id`, `cus_id`) VALUES
+('OR001', '38 30 42', '1', 200, '-', 50, '2024-01-23', 'กำลังตัดเย็บ', 'E002', 'D002', 'C001'),
+('OR002', 'test1', '2', 200, '-', 100, '2024-01-24', 'กำลังตัดเย็บ', 'E002', 'D001', 'C002'),
+('OR003', '28 26 33', '3', 200, '-', 0, '2024-01-28', 'กำลังตัดเย็บ', 'E002', 'D001', 'C002');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `queu_e`
+--
+
+CREATE TABLE `queu_e` (
+  `ord_id` varchar(10) NOT NULL COMMENT 'รหัสสั่งตัดชุด',
+  `ord_date` date NOT NULL COMMENT 'วันที่เริ่ม',
+  `queue_datefinish` date NOT NULL COMMENT 'วันที่สิ้นสุด',
+  `cus_id` varchar(10) NOT NULL COMMENT 'รหัสลูกค้า'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `queu_e`
+--
+
+INSERT INTO `queu_e` (`ord_id`, `ord_date`, `queue_datefinish`, `cus_id`) VALUES
+('OR001', '2024-01-23', '0000-00-00', 'C001'),
+('OR002', '2024-01-24', '0000-00-00', 'C002'),
+('OR003', '2024-01-28', '0000-00-00', 'C002');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `solve`
+--
+
+CREATE TABLE `solve` (
+  `ord_id` varchar(10) NOT NULL COMMENT 'รหัสสั่งตัดชุด',
+  `solv_detail` varchar(50) NOT NULL COMMENT 'รายละเอียดการแก้ชุด',
+  `solv_date` date NOT NULL COMMENT 'วันที่'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tailored_suit`
+--
+
+CREATE TABLE `tailored_suit` (
+  `ord_id` varchar(10) NOT NULL COMMENT 'รหัสสั่งตัด',
+  `tailore_date` date NOT NULL COMMENT 'วันที่ตัดเสร็จ',
+  `emp_id` varchar(10) NOT NULL COMMENT 'รหัสพนักงาน'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tailored_suit`
+--
+
+INSERT INTO `tailored_suit` (`ord_id`, `tailore_date`, `emp_id`) VALUES
+('OR003', '0000-00-00', 'E002');
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `customer`
+--
+ALTER TABLE `customer`
+  ADD PRIMARY KEY (`cus_id`);
+
+--
+-- Indexes for table `design`
+--
+ALTER TABLE `design`
+  ADD PRIMARY KEY (`design_id`);
+
+--
+-- Indexes for table `employees`
+--
+ALTER TABLE `employees`
+  ADD PRIMARY KEY (`emp_id`);
+
+--
+-- Indexes for table `order_sewing`
+--
+ALTER TABLE `order_sewing`
+  ADD PRIMARY KEY (`ord_id`),
+  ADD KEY `emp_id` (`emp_id`),
+  ADD KEY `design_id` (`design_id`),
+  ADD KEY `cus_id` (`cus_id`);
+
+--
+-- Indexes for table `queu_e`
+--
+ALTER TABLE `queu_e`
+  ADD PRIMARY KEY (`ord_id`),
+  ADD KEY `cus_id` (`cus_id`);
+
+--
+-- Indexes for table `solve`
+--
+ALTER TABLE `solve`
+  ADD PRIMARY KEY (`ord_id`);
+
+--
+-- Indexes for table `tailored_suit`
+--
+ALTER TABLE `tailored_suit`
+  ADD PRIMARY KEY (`ord_id`),
+  ADD KEY `emp_id` (`emp_id`);
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `order_sewing`
+--
+ALTER TABLE `order_sewing`
+  ADD CONSTRAINT `design_fk` FOREIGN KEY (`design_id`) REFERENCES `design` (`design_id`),
+  ADD CONSTRAINT `order_sewing_ibfk_2` FOREIGN KEY (`emp_id`) REFERENCES `employees` (`emp_id`),
+  ADD CONSTRAINT `order_sewing_ibfk_3` FOREIGN KEY (`cus_id`) REFERENCES `customer` (`cus_id`);
+
+--
+-- Constraints for table `queu_e`
+--
+ALTER TABLE `queu_e`
+  ADD CONSTRAINT `queu_e_ibfk_1` FOREIGN KEY (`cus_id`) REFERENCES `customer` (`cus_id`);
+
+--
+-- Constraints for table `tailored_suit`
+--
+ALTER TABLE `tailored_suit`
+  ADD CONSTRAINT `tailored_suit_ibfk_1` FOREIGN KEY (`emp_id`) REFERENCES `employees` (`emp_id`);
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 
